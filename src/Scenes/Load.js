@@ -9,6 +9,6 @@ class Load extends Phaser.Scene {
 
     create() {
         
-        this.scene.start('levelOne'); 
+        this.scene.start('overworld'); 
     }
 }

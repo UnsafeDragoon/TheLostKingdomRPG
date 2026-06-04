@@ -4,7 +4,8 @@ class Load extends Phaser.Scene {
     }
 
     preload() {
-        
+        this.load.setPath("./assets/");
+        this.load.image("playerSprite", "placeholder.png");
     }
 
     create() {

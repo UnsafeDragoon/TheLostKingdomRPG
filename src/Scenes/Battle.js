@@ -8,6 +8,8 @@ class Battle extends Phaser.Scene {
         // temporary default stats so UI has something to display
         this.playerHealth = 100;
         this.enemyHealth = 30;
+        this.playerDamage = 10;
+        this.enemyDamage = 5;
     }
 
     create() {
@@ -54,19 +56,68 @@ class Battle extends Phaser.Scene {
             });
         });
 
+        // State Machine
+        this.turnState = 'PLAYER_TURN';
+
         // Click logic for each specific button
         this.attackBtn.on('pointerdown', () => {
+            // If it's not the player's turn, ignore clicks
+            if (this.turnState !== 'PLAYER_TURN') return;
             console.log("Player chose ATTACK!");
-            // Add the actual attack math here later
+
+            // Lock turn state
+            this.turnState = 'ENEMY_TURN';
+
+            // Deal dmg and update text on screen
+            this.enemyHealth -= this.playerDamage;
+            this.enemyHealthText.setText(`HP: ${this.enemyHealth}`);
+
+            // Check for win condition
+            if (this.enemyHealth <= 0) {
+                console.log("Victory!");
+                this.turnState = 'GAME_OVER';
+                // TODO: Return to overworld scene
+                return;
+            }
+
+            // If enemy still alive, trigger their turn after 1 second delay
+            this.time.delayedCall(1000, this.enemyAttack, [], this);
         });
 
         this.defendBtn.on('pointerdown', () => {
+            if (this.turnState !== 'PLAYER_TURN') return;
             console.log("Player chose DEFEND!");
+            this.turnState = 'ENEMY_TURN';
+            this.time.delayedCall(1000, this.enemyAttack, [], this);
         });
 
         this.fleeBtn.on('pointerdown', () => {
+            if (this.turnState !== 'PLAYER_TURN') return;
             console.log("Player chose FLEE!");
         });
+
+    }
+
+    // Method for enemy turns
+    enemyAttack() {
+        // Double check we haven't ended the game
+        if (this.turnState === 'GAME_OVER') return;
+        console.log("Enemy attacks!");
+
+        // Deal damage to player
+        this.playerHealth -= this.enemyDamage;
+        this.playerHealthText.setText(`HP: ${this.playerHealth}`);
+
+        // Check for loss condition
+        if (this.playerHealth <= 0) {
+            console.log("Defeat! Game Over.");
+            this.turnState = 'GAME_OVER';
+            return;
+        }
+
+        // If player survives, give the turn back to them
+        this.turnState = 'PLAYER_TURN';
+        console.log("It's your turn");
     }
 
     update() {

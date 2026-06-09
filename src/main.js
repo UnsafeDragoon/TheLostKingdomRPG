@@ -10,7 +10,7 @@ let config = {
     },
     width: 640,         // 10 tiles, each 16 pixels, scaled 4x
     height: 640,
-    scene: [Load, Battle, overworld, devSpriteTest]
+    scene: [Load, overworld, Battle, devSpriteTest]
 }
 
 const game = new Phaser.Game(config);

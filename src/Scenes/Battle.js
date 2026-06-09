@@ -35,6 +35,38 @@ class Battle extends Phaser.Scene {
         this.attackBtn = this.add.text(60, 570, '> Attack', { fontSize: '24px', fill: '#ffff00' });
         this.defendBtn = this.add.text(240, 570, '> Defend', { fontSize: '24px', fill: '#ffff00' });
         this.fleeBtn = this.add.text(420, 570, '> Flee', { fontSize: '24px', fill: '#ffff00' });
+
+        // Menu interactivity
+        const buttons = [this.attackBtn, this.defendBtn, this.fleeBtn];
+
+        buttons.forEach(btn => {
+            // Make clickable and turn the mouse into a pointer hand
+            btn.setInteractive({ useHandCursor: true });
+
+            // Hover in effect: turn text white
+            btn.on('pointerover', () => {
+                btn.setStyle({ fill: '#ffffff' });
+            });
+
+            // Hover out effect: turn text back to yellow
+            btn.on('pointerout', () => {
+                btn.setStyle({ fill: '#ffff00' });
+            });
+        });
+
+        // Click logic for each specific button
+        this.attackBtn.on('pointerdown', () => {
+            console.log("Player chose ATTACK!");
+            // Add the actual attack math here later
+        });
+
+        this.defendBtn.on('pointerdown', () => {
+            console.log("Player chose DEFEND!");
+        });
+
+        this.fleeBtn.on('pointerdown', () => {
+            console.log("Player chose FLEE!");
+        });
     }
 
     update() {

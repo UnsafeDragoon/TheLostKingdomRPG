@@ -57,7 +57,8 @@ class overworld extends Phaser.Scene {
             this.scene.start("devSpriteTest");
         });
         this.input.keyboard.on('keydown-NINE', () => {
-            this.scene.start("battleScene");
+            this.scene.pause();
+            this.scene.launch("battleScene");
         });
     }
 

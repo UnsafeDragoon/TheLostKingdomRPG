@@ -76,7 +76,12 @@ class Battle extends Phaser.Scene {
             if (this.enemyHealth <= 0) {
                 console.log("Victory!");
                 this.turnState = 'GAME_OVER';
-                // TODO: Return to overworld scene
+                // short pause after victory
+                this.time.delayedCall(1500, () => {
+                    this.scene.resume('overworld');
+                    this.scene.stop();              
+                });
+
                 return;
             }
 

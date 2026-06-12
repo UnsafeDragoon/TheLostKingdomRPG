@@ -8,7 +8,7 @@ class Battle extends Phaser.Scene {
         // temporary default stats so UI has something to display
         this.playerHealth = 100;
         this.enemyHealth = 30;
-        this.playerDamage = 10;
+        this.playerDamage = data.damage || 10; // default to 10 if something goes wrong
         this.enemyDamage = 5;
     }
 
@@ -70,6 +70,7 @@ class Battle extends Phaser.Scene {
 
             // Deal dmg and update text on screen
             this.enemyHealth -= this.playerDamage;
+            this.enemyHealth = Math.max(0, this.enemyHealth);
             this.enemyHealthText.setText(`HP: ${this.enemyHealth}`);
 
             // Check for win condition
@@ -78,7 +79,7 @@ class Battle extends Phaser.Scene {
                 this.turnState = 'GAME_OVER';
                 // short pause after victory
                 this.time.delayedCall(1500, () => {
-                    this.scene.resume('overworld');
+                    this.scene.resume('overworld', { victory: true });
                     this.scene.stop();              
                 });
 
@@ -111,6 +112,7 @@ class Battle extends Phaser.Scene {
 
         // Deal damage to player
         this.playerHealth -= this.enemyDamage;
+        this.playerHealth = Math.max(0, this.playerHealth);
         this.playerHealthText.setText(`HP: ${this.playerHealth}`);
 
         // Check for loss condition

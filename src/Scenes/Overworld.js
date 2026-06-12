@@ -58,7 +58,16 @@ class overworld extends Phaser.Scene {
         });
         this.input.keyboard.on('keydown-NINE', () => {
             this.scene.pause();
-            this.scene.launch("battleScene");
+            // Pass the player's current damage as an object
+            this.scene.launch("battleScene", { damage: this.player.swordDamage });
+        });
+        
+        // Listen for the 'resume' event from the battle scene
+        this.events.on('resume', (scene, data) => {
+            if (data && data.victory) {
+                this.player.upgradeSword();
+                console.log(`Victory! Sword upgraded to Level ${this.player.swordLevel}. Damage is now ${this.player.swordDamage}!`);
+            }
         });
     }
 

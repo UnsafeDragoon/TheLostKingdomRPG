@@ -12,16 +12,20 @@ class overworld extends Phaser.Scene {
 
         this.dialogueData = {
             "The Chief": [
-                "Knight! You must help our townspeople in such dire need!"
+                "Knight! You must help our townspeople in such dire need!",
+                "Thank you hero!"
             ],
             "Meaty Megee": [
-                "Aw fiddlesticks! Some dark knights stole my meat supply and won't give it back!"
+                "Aw fiddlesticks! Some dark knights stole my meat supply and won't give it back!",
+                "That sserves them right! Nobody touches my product! Nobody!"
             ],
             "Gold Gremlin Gary": [
-                "Aw dangnabbit! Some rube robbed me on my way here and scattered my 3 gold pieces somewhere!"
+                "Aw dangnabbit! Some rube robbed me on my way here and scattered my 3 gold pieces somewhere!",
+                "I always knew you were an easy mark- I mean... thanks pal."
             ],
             "Lumberjack Larry": [
-                "Hot belgian waffles! Some dark knights are squatting in the forrest below where I chop my wood!"
+                "Hot belgian waffles! Some dark knights are squatting in the forrest below where I chop my wood!",
+                "Thanks mista, I appreciate you showing those boys how a knight should REALLY fight!"
             ]
         }
 
@@ -233,13 +237,42 @@ class overworld extends Phaser.Scene {
             this.scene.pause();
             this.scene.launch("battleScene", structuredClone(GameState));
         });
+        this.physics.add.overlap(this.player, this.golds, (obj1, obj2) => {
+            obj2.destroy();  
+            GameState.world.goldObtained++;
+        });
+        this.physics.add.overlap(this.player, this.meats, (obj1, obj2) => {
+            obj2.destroy();  
+            GameState.world.meatObtained++;
+        });
+        
 
         
             
         this.input.keyboard.on("keydown-E", () => {
+            //GameState.world = {meatObtained: 9, goldObtained: 3, enemySlain: 6};
+            console.log(GameState.world);
+            
             if(this.nearNPC != null){
-                console.log(`Talking to ${this.nearNPC.name}!`);
-                this.dialogue.setText(`${this.nearNPC.name}: ${this.dialogueData[this.nearNPC.name][0]}`);
+                let x = 0;
+                if(this.nearNPC.name == "The Chief"){
+                    if(GameState.world.goldObtained === 3 && GameState.world.meatObtained === 9 && GameState.world.enemySlain === 6){
+                        x = 1;
+                        setTimeout(() => {
+                            this.scene.pause();
+                            this.scene.launch("creditsScene");
+                        }, 5000)
+                    }
+                    
+                } else if(this.nearNPC.name == "Meaty Megee" && GameState.world.meatObtained === 9){
+                    x = 1;
+                } else if(this.nearNPC.name == "Gold Gremlin Gary" && GameState.world.goldObtained === 3){
+                    x = 1;
+                } else if(this.nearNPC.name == "Lumberjack Larry" && GameState.world.enemySlain === 6){
+                    x = 1;
+                }
+
+                this.dialogue.setText(`${this.nearNPC.name}: ${this.dialogueData[this.nearNPC.name][x]}`);
                 this.dialogue.visible = true;
                 setTimeout(() => {
                     this.dialogue.visible = false;

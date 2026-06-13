@@ -53,6 +53,11 @@ class Credits extends Phaser.Scene {
         }).setOrigin(0.5);
 
         this.input.keyboard.once("keydown-SPACE", () => {
+            resetGameState();
+
+            this.scene.stop("overworld");
+            this.scene.stop("battleScene");
+            
             this.scene.start("titleScene");
         });
     }

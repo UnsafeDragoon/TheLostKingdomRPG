@@ -35,7 +35,16 @@ class overworld extends Phaser.Scene {
 
         this.bgLayer = this.map.createLayer("backgroundLayer", backgroundTiles, 0, 0);
         this.groundLayer = this.map.createLayer("groundLayer", terrainTiles, 0, 0);
-        this.decorLayer = this.map.createLayer("decorLayer", allDecor, 0, 0);
+
+        this.decorFLayer = this.map.createLayer("decorFrontLayer", allDecor, 0, 0);
+        this.decorBLayer = this.map.createLayer("decorBackLayer", allDecor, 0, 0);
+
+        this.decorFLayer.setCollisionByProperty({
+            collides: true
+        });
+        this.decorBLayer.setCollisionByProperty({
+            collides: true
+        });
 
         this.invisibleLayer = this.map.createLayer("invisibleWallLayer", terrainTiles, 0, 0);
 
@@ -43,6 +52,8 @@ class overworld extends Phaser.Scene {
             collides: true
         });
         this.invisibleLayer.visible = false;
+
+
 
 
         this.left = this.input.keyboard.addKey("A");
@@ -57,7 +68,7 @@ class overworld extends Phaser.Scene {
             "playerIdle", 1,
             this.left, this.right, this.up, this.down);
         this.player.setScale(1);
-        this.player.moveSpeed = 400;
+        this.player.moveSpeed = 800;
 
         this.anims.create({
             key: "playerIdle",
@@ -80,8 +91,13 @@ class overworld extends Phaser.Scene {
 
 
         this.physics.add.collider(this.player, this.invisibleLayer);
+        this.physics.add.collider(this.player, this.decorFLayer);
+        this.physics.add.collider(this.player, this.decorBLayer);
 
-
+        this.player.depth = this.player.y;
+        this.decorFLayer.depth = this.player.y + 1;
+        this.decorBLayer.depth = this.player.y - 1;
+        
 
 
         
@@ -121,6 +137,9 @@ class overworld extends Phaser.Scene {
                 console.log(`Victory! Sword upgraded to Level ${this.player.swordLevel}. Damage is now ${this.player.swordDamage}!`);
             }
         });
+
+
+        
     }
 
     update(time, delta) {

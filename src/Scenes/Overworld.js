@@ -289,14 +289,15 @@ class overworld extends Phaser.Scene {
         this.events.on('resume', (scene, data) => {
             this.tweens.killTweensOf(this.player);
             this.player.alpha = 1;
-            
+
             if (data && data.victory) {
                 if (this.currentEnemy) {
                     this.currentEnemy.destroy();
                 }
+                GameState.world.enemySlain++;
                 this.player.swordLevel = GameState.player.swordLevel;
                 this.player.swordDamage = GameState.player.damage;
-                console.log(`Victory! Sword upgraded to Level ${this.player.swordLevel}.`);
+                console.log(`Victory! Enemies Slain: ${GameState.world.enemySlain}`);
             } else {
                 if (this.currentEnemy) {
                     console.log("Fled! Granting 3 seconds of invincibility...");

@@ -8,6 +8,9 @@ class overworld extends Phaser.Scene {
     }
     create() {
         
+        this.bgmMain = this.sound.add("bgm_main", {volume: .16, loop: true});
+        this.bgmMain.play();
+
 
 
         this.dialogueData = {
@@ -152,7 +155,7 @@ class overworld extends Phaser.Scene {
             "playerIdle", 1,
             this.left, this.right, this.up, this.down);
         this.player.setScale(1);
-        this.player.moveSpeed = 800;
+        this.player.moveSpeed = 300;
         this.player.nearNPC = null;
         this.nearNPCReset = 50;
 
@@ -286,6 +289,9 @@ class overworld extends Phaser.Scene {
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(1);
 
+        this.cameraTime = 0;
+        this.cameraDriftStrength = 12
+
 
 
         this.physics.world.setBounds(
@@ -366,6 +372,13 @@ class overworld extends Phaser.Scene {
             this.nearNPC = null;
             this.nearNPCReset = 50;  
         }
+
+        this.cameraTime += delta * 0.001;
+
+        const offsetX = Math.sin(this.cameraTime * 1.2) * this.cameraDriftStrength;
+        const offsetY = Math.cos(this.cameraTime * 1.0) * this.cameraDriftStrength;
+
+        this.cameras.main.followOffset.set(offsetX, offsetY);
 
         this.player.update();
         this.enemies.getChildren().forEach(enemy => {

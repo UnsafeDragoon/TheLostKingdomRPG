@@ -81,6 +81,15 @@ class Load extends Phaser.Scene {
         
         
         this.load.tilemapTiledJSON("overworld", "overworld.tmj");
+
+
+
+
+
+        this.load.audio("bgm_main", "audio/A Great Journey - Overworld.wav");
+        this.load.audio("bgm_battle", "audio/Gearing Up - Battle.wav");
+
+
     }
 
     create() {

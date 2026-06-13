@@ -2,7 +2,7 @@ class Battle extends Phaser.Scene {
     constructor() {
         super('battleScene');
     }
-
+    
     init(data) {
         console.log("Battle started - Data received:", data);
         // temporary default stats so UI has something to display
@@ -14,6 +14,9 @@ class Battle extends Phaser.Scene {
 
     create() {
         // background
+        // this.bgmMain = this.sound.add("bgm_battle", {volume: .16, loop: true});
+        // this.bgmMain.play();
+
         this.add.rectangle(0, 0, 640, 640, 0x4d9262).setOrigin(0, 0);
         this.add.image(100, 100, 'tilemap_tree').setScale(2.5);
         this.add.image(320, 80, 'tilemap_tree').setScale(2.5).setTint(0xdddddd); 

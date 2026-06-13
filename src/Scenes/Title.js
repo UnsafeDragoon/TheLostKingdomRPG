@@ -35,5 +35,16 @@ class Title extends Phaser.Scene {
         this.input.keyboard.once("keydown-SPACE", () => {
             this.scene.start("overworld");
         });
+
+
+        this.add.text(320, 520, "Press C for Credits", {
+            fontSize: "22px",
+            color: "#ffffff"
+        }).setOrigin(0.5);
+
+        this.input.keyboard.once("keydown-C", () => {
+            this.scene.start("creditsScene");
+        });
     }
+    
 }

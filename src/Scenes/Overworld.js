@@ -225,8 +225,11 @@ class overworld extends Phaser.Scene {
             this.nearNPC = obj2;
         });
         this.physics.add.overlap(this.player, this.enemies, (player, enemy) => {
-            enemy.destroy();
-            GameState.world.enemySlain++;
+            // Disable the enemy's physics temporarily so it doesn't trigger the battle 60 times a second
+            enemy.body.enable = false;
+
+            // Save which enemy we hit to the scene so we can delete it later if we win
+            this.currentEnemy = enemy;
 
             GameState.player.x = player.x;
             GameState.player.y = player.y;
@@ -317,9 +320,38 @@ class overworld extends Phaser.Scene {
         
         // Listen for the 'resume' event from the battle scene
         this.events.on('resume', (scene, data) => {
+            this.tweens.killTweensOf(this.player);
+            this.player.alpha = 1;
+
             if (data && data.victory) {
-                this.player.upgradeSword();
-                console.log(`Victory! Sword upgraded to Level ${this.player.swordLevel}. Damage is now ${this.player.swordDamage}!`);
+                if (this.currentEnemy) {
+                    this.currentEnemy.destroy();
+                }
+                GameState.world.enemySlain++;
+                this.player.swordLevel = GameState.player.swordLevel;
+                this.player.swordDamage = GameState.player.damage;
+                console.log(`Victory! Enemies Slain: ${GameState.world.enemySlain}`);
+            } else {
+                if (this.currentEnemy) {
+                    console.log("Fled! Granting 3 seconds of invincibility...");
+
+                    // Make the player blink so they know they are safe
+                    let blinkTween = this.tweens.add({
+                        targets: this.player,
+                        alpha: 0.2, 
+                        duration: 200,
+                        yoyo: true,
+                        repeat: 7 
+                    });
+
+                    // Wait 3 seconds before turning the enemy's physics back on
+                    this.time.delayedCall(3000, () => {
+                        if (this.currentEnemy && this.currentEnemy.active) {
+                            this.currentEnemy.body.enable = true;
+                        }
+                        this.player.alpha = 1;
+                    });
+                }
             }
         });
 

@@ -9,7 +9,7 @@ class Battle extends Phaser.Scene {
         this.playerHealth = 100;
         this.enemyHealth = 30;
         this.playerDamage = data.damage || 10; // default to 10 if something goes wrong
-        this.enemyDamage = 5;
+        this.enemyDamage = 15;
     }
 
     create() {
@@ -37,13 +37,21 @@ class Battle extends Phaser.Scene {
             });
         }
 
+        if (!this.anims.exists('bKnightAttack')) {
+            this.anims.create({
+                key: "bKnightAttack",
+                frameRate: 12,
+                frames: this.anims.generateFrameNumbers("bKnightAttack", { start: 0, end: 5 })
+            });
+        }
+
         // Player on the left side
         this.playerSprite = this.add.sprite(160, 350, 'playerIdle').setScale(2);
         this.playerSprite.play('playerIdle');
 
         // Enemy on the right side
-        this.enemySprite = this.add.sprite(480, 350, 'woodIdle').setScale(2).setFlipX(true);
-        this.enemySprite.play('woodIdle');
+        this.enemySprite = this.add.sprite(480, 350, 'bKnightIdle').setScale(2.5).setFlipX(true);
+        this.enemySprite.play('bKnightIdle');
 
         // Health UI
         this.playerHealthText = this.add.text(120, 205, `HP: ${this.playerHealth}`, { 
@@ -118,6 +126,8 @@ class Battle extends Phaser.Scene {
                     if (this.enemyHealth <= 0) {
                         this.turnState = 'GAME_OVER';
                         this.add.text(200, 100, 'VICTORY!', { fontSize: '48px', fill: '#ffff00', fontFamily: '"Press Start 2P"' });
+                        GameState.player.damage += 5;     
+                        GameState.player.swordLevel += 1;
                         this.time.delayedCall(1500, () => {
                             this.scene.resume('overworld', { victory: true }); 
                             this.scene.stop();              
@@ -159,7 +169,7 @@ class Battle extends Phaser.Scene {
                 alpha: 0,
                 duration: 800,
                 onComplete: () => {
-                    this.scene.resume('overworld'); 
+                    this.scene.resume('overworld', { victory: false });
                     this.scene.stop();
                 }
             });
@@ -189,27 +199,26 @@ class Battle extends Phaser.Scene {
     enemyAttack() {
         // Double check we haven't ended the game
         if (this.turnState === 'GAME_OVER') return;
-        console.log("Enemy attacks!");
 
-        // Enemy Attack Animation (Bump Forward)
+        this.enemySprite.play('bKnightAttack');
+
+        // Enemy Attack Animation
         this.tweens.add({
             targets: this.enemySprite,
-            x: '-=250', // Dash left
-            duration: 180,
+            x: '-=200', 
+            duration: 200,
             yoyo: true,
             ease: 'Power2',
             onYoyo: () => {
                 this.playerSprite.setTintFill(0xff0000);
                 this.time.delayedCall(150, () => this.playerSprite.clearTint());
 
-                // Check if the player is defending
                 let finalDamage = this.isDefending ? Math.floor(this.enemyDamage / 2) : this.enemyDamage;
 
                 this.playerHealth -= finalDamage;
                 this.playerHealth = Math.max(0, this.playerHealth);
                 this.playerHealthText.setText(`HP: ${this.playerHealth}`);
                 
-                // Show different text depending on if we blocked it
                 if (this.isDefending) {
                     this.showFloatingMessage(this.playerSprite.x, this.playerSprite.y, "BLOCKED!");
                     this.showFloatingDamage(this.playerSprite.x, this.playerSprite.y + 40, finalDamage);
@@ -218,7 +227,7 @@ class Battle extends Phaser.Scene {
                 }
             },
             onComplete: () => {
-                // Drop the shield and return to idle stance
+                this.enemySprite.play('bKnightIdle');
                 this.playerSprite.play('playerIdle');
                 this.isDefending = false;
 
@@ -226,9 +235,8 @@ class Battle extends Phaser.Scene {
                     this.turnState = 'GAME_OVER';
                     this.add.text(200, 100, 'DEFEAT...', { fontSize: '48px', fill: '#ff0000', fontFamily: '"Press Start 2P"' });
                     
-                    // Boot player back to overworld after losing
                     this.time.delayedCall(2000, () => {
-                        this.scene.resume('overworld');
+                        this.scene.resume('overworld', { victory: false });
                         this.scene.stop();
                     });
                     return;

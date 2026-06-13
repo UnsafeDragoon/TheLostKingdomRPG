@@ -50,6 +50,10 @@ class Load extends Phaser.Scene {
             frameWidth: 100,
             frameHeight: 100
         });
+        this.load.spritesheet("bKnightAttack", "sprites/bWarrior_Attack1.png", {
+            frameWidth: 192,
+            frameHeight: 192
+        });
 
 
         

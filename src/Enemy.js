@@ -7,8 +7,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         this.health = 30;
         this.baseDamage = 5;
-        this.moveSpeed = 90;
-        this.chaseRange = 150;
+        this.moveSpeed = 200;
+        this.chaseRange = 400;
 
         this.setCollideWorldBounds(true);
     }

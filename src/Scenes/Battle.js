@@ -165,6 +165,24 @@ class Battle extends Phaser.Scene {
             });
         });
 
+        // Access the state
+        //this.gameState = this.scene.settings.data;
+
+        // Do this upon finishing the battle. Can store data into the persistent gamestate.
+    //     this.events.on('resume', (scene, data) => {
+
+    //         if (!data) return;
+
+    //         if (data.swordLevel < this.swordLevel) {
+    //             GameState.player.swordLevel = this.player.swordLevel;
+    //             GameState.player.damage = this.player.swordDamage;
+    //         }
+
+    //         if (data.player) {
+    //             GameState.player.health = data.player.health;
+    //         }
+    //     });
+
     }
 
     // Method for enemy turns

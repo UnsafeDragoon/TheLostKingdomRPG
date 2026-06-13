@@ -1,3 +1,4 @@
+
 class overworld extends Phaser.Scene {
     constructor() {
         super("overworld");
@@ -6,6 +7,8 @@ class overworld extends Phaser.Scene {
         this.load.scenePlugin('AnimatedTiles', './lib/AnimatedTiles.js', 'animatedTiles', 'animatedTiles');
     }
     create() {
+        
+
 
         this.dialogueData = {
             "The Chief": [
@@ -110,6 +113,24 @@ class overworld extends Phaser.Scene {
             })
         })
 
+        this.anims.create({
+            key: "bKnightIdle",
+            frameRate: 12,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("bKnightIdle", {
+                frames: [0, 1, 2, 3, 4, 5, 6, 7]
+            })
+        })
+
+        this.anims.create({
+            key: "goldNugget",
+            frameRate: 12,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("goldNugget", {
+                frames: [0, 1, 2, 3, 4, 5]
+            })
+        })
+
         
 
 
@@ -166,6 +187,9 @@ class overworld extends Phaser.Scene {
         console.log(objectLayer);
         
         this.npcs = this.add.group();
+        this.enemies = this.add.group();
+        this.golds = this.add.group();
+        this.meats = this.add.group();
 
         objectLayer.objects.forEach(obj => {
             
@@ -176,6 +200,18 @@ class overworld extends Phaser.Scene {
                 npc.depth = this.player.y;
                 npc.play(anim);
                 this.npcs.add(npc);
+            } else if(obj.properties.find(p => p.name === "type")?.value === "enemy"){
+                let enemy = new Enemy(this, obj.x, obj.y, "bKnightIdle");
+                enemy.play("bKnightIdle");
+                this.enemies.add(enemy);
+            } else if(obj.properties.find(p => p.name === "type")?.value === "gold"){
+                const gold = this.physics.add.sprite(obj.x, obj.y, "goldNugget", 1);
+                gold.play("goldNugget");
+                this.golds.add(gold);
+            } else if(obj.properties.find(p => p.name === "type")?.value === "meat"){
+                const meat = this.physics.add.sprite(obj.x, obj.y, "meatChunk", 0);
+                //this.meat.play("meatChunk");
+                this.meats.add(meat);
             }
         });
         
@@ -183,6 +219,14 @@ class overworld extends Phaser.Scene {
             //console.log(obj2);
             
             this.nearNPC = obj2;
+        });
+        this.physics.add.overlap(this.player, this.enemies, (player, enemy) => {
+            enemy.destroy();
+            GameState.player.x = player.x;
+            GameState.player.y = player.y;
+            GameState.player.damage = player.damage;
+            this.scene.pause();
+            this.scene.launch("battleScene", structuredClone(GameState));
         });
 
         
@@ -252,43 +296,13 @@ class overworld extends Phaser.Scene {
 
         this.nearNPCReset--;
         if(this.nearNPCReset < 0){
-            //console.log("RESET!");
-            
             this.nearNPC = null;
-            this.nearNPCReset = 50;
-            //console.log(this.nearNPC);
-            
+            this.nearNPCReset = 50;  
         }
 
         this.player.update();
-        //console.log(this.game.loop.actualFps);
+        this.enemies.getChildren().forEach(enemy => {
+            enemy.update(this.player);
+        });    
     }
-
-
-    // StateMachineBuild(obj, validStates){
-    //     obj.state = "NULL";
-    //     obj.newstate = "Idle";
-    //     obj.validStates = validStates;
-    // }
-    // StateChange(obj, newState){
-    //     if(newState in obj.validStates){
-    //         obj.newstate = newState;
-    //     } else{
-    //         console.log("ERROR! INVALID STATE!");
-    //     }
-    // }
-    // StateReadPlayer(obj){
-    //     if(obj.state == obj.newState){
-    //         return;
-    //     }
-
-    //     if(newState == "Run"){
-    //         obj.play("playerRun");
-    //         obj.state = obj.newState;
-
-    //     } else if(newState == "Idle"){
-    //         obj.play("playerIdle");
-    //         obj.state = obj.newState;
-    //     }
-    // }
 }

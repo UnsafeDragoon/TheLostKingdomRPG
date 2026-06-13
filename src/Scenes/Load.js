@@ -7,8 +7,9 @@ class Load extends Phaser.Scene {
         this.load.setPath("./assets/");
         this.load.image("playerSprite", "placeholder.png");
 
-        this.load.image("tilemap_terrain1", "tiles/Tilemap_color2.png");
-       
+        this.load.image("tilemap_terrain1", "tiles/Tilemap_color2.png");       
+        this.load.image("meatChunk", "sprites/Meat Resource.png");
+
         this.load.spritesheet("playerIdle", "sprites/Warrior_Idle.png", {
             frameWidth: 100,
             frameHeight: 100
@@ -44,6 +45,17 @@ class Load extends Phaser.Scene {
         this.load.spritesheet("woodIdle", "sprites/Pawn_Idle Wood.png", {
             frameWidth: 192,
             frameHeight: 192
+        });
+        this.load.spritesheet("bKnightIdle", "sprites/bWarrior_Idle.png", {
+            frameWidth: 100,
+            frameHeight: 100
+        });
+
+
+        
+        this.load.spritesheet("goldNugget", "sprites/Gold_Resource_Highlight.png", {
+            frameWidth: 128,
+            frameHeight: 128
         });
 
         this.load.image("tilemap_water", "tiles/Water Background color.png");

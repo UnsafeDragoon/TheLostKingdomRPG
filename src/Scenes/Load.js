@@ -19,6 +19,16 @@ class Load extends Phaser.Scene {
             frameHeight: 100
         });
 
+        this.load.spritesheet("playerAttack", "sprites/Warrior_Attack1.png", {
+            frameWidth: 192,
+            frameHeight: 192
+        });
+
+        this.load.spritesheet("playerDefend", "sprites/Warrior_Guard.png", {
+            frameWidth: 192, 
+            frameHeight: 192
+        });
+
         this.load.spritesheet("chiefIdle", "sprites/Idle.png", {
             frameWidth: 192,
             frameHeight: 192

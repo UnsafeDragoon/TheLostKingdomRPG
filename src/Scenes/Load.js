@@ -10,13 +10,13 @@ class Load extends Phaser.Scene {
         this.load.image("tilemap_terrain1", "tiles/Tilemap_color2.png");
        
         this.load.spritesheet("playerIdle", "sprites/Warrior_Idle.png", {
-            frameWidth: 192,
-            frameHeight: 192
+            frameWidth: 100,
+            frameHeight: 100
         });
 
         this.load.spritesheet("playerRun", "sprites/Warrior_Run.png", {
-            frameWidth: 192,
-            frameHeight: 192
+            frameWidth: 100,
+            frameHeight: 100
         });
 
         this.load.image("tilemap_water", "tiles/Water Background color.png");

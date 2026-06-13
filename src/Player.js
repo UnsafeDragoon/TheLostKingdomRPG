@@ -25,20 +25,37 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     update(time, delta) {
         this.setVelocity(0);
 
+        let isMoving = false;
+
         if (this.left.isDown) {
             this.setVelocityX(-this.moveSpeed);
+            this.setFlipX(true);
+            isMoving = true;
         } else if (this.right.isDown) {
             this.setVelocityX(this.moveSpeed);
+            this.setFlipX(false);
+            isMoving = true;
         }
 
         if (this.up.isDown) {
             this.setVelocityY(-this.moveSpeed);
+            isMoving = true;
         } else if (this.down.isDown) {
             this.setVelocityY(this.moveSpeed);
+            isMoving = true;
         }
 
         this.body.velocity.normalize().scale(this.moveSpeed);
+
+
+        if(isMoving && this.anims.currAnim?.key !== "playerRun"){
+            this.anims.play("playerRun", true);
+        } else if(!isMoving && this.anims.currAnim?.key !== "playerIdle"){
+            this.anims.play("playerIdle", true);
+        }
     }
+
+    
 
     takeDamage(amount) {
         this.health -= amount;

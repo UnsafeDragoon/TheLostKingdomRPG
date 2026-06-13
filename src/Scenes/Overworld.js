@@ -37,7 +37,12 @@ class overworld extends Phaser.Scene {
         this.groundLayer = this.map.createLayer("groundLayer", terrainTiles, 0, 0);
         this.decorLayer = this.map.createLayer("decorLayer", allDecor, 0, 0);
 
+        this.invisibleLayer = this.map.createLayer("invisibleWallLayer", terrainTiles, 0, 0);
 
+        this.invisibleLayer.setCollisionByProperty({
+            collides: true
+        });
+        this.invisibleLayer.visible = false;
 
 
         this.left = this.input.keyboard.addKey("A");
@@ -49,10 +54,10 @@ class overworld extends Phaser.Scene {
 
         
         this.player = new Player(this, 550, 2700,  
-            "playerIdle", 40,
+            "playerIdle", 1,
             this.left, this.right, this.up, this.down);
         this.player.setScale(1);
-        this.player.moveSpeed = 600;
+        this.player.moveSpeed = 400;
 
         this.anims.create({
             key: "playerIdle",
@@ -74,7 +79,7 @@ class overworld extends Phaser.Scene {
         this.player.play("playerIdle");
 
 
-
+        this.physics.add.collider(this.player, this.invisibleLayer);
 
 
 
@@ -125,8 +130,41 @@ class overworld extends Phaser.Scene {
 //     this.cameras.main.scrollX,
 //     this.cameras.main.scrollY
 // );
+
+        //if(time % 100 == 0){
+            //console.log(tile);
+            
+        //}
+        
         this.player.update();
         //console.log(this.game.loop.actualFps);
     }
+
+
+    // StateMachineBuild(obj, validStates){
+    //     obj.state = "NULL";
+    //     obj.newstate = "Idle";
+    //     obj.validStates = validStates;
+    // }
+    // StateChange(obj, newState){
+    //     if(newState in obj.validStates){
+    //         obj.newstate = newState;
+    //     } else{
+    //         console.log("ERROR! INVALID STATE!");
+    //     }
+    // }
+    // StateReadPlayer(obj){
+    //     if(obj.state == obj.newState){
+    //         return;
+    //     }
+
+    //     if(newState == "Run"){
+    //         obj.play("playerRun");
+    //         obj.state = obj.newState;
+
+    //     } else if(newState == "Idle"){
+    //         obj.play("playerIdle");
+    //         obj.state = obj.newState;
+    //     }
+    // }
 }
-         

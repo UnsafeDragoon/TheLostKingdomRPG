@@ -7,11 +7,9 @@ const defaultState = {
         damage: 10
     },
     world: {
-        enemyAlive: [true, true, true, true, true, true],
-        meatObtained: [false, false, false, false, false,
-            false, false, false, false
-        ],
-        goldObtained: [false, false, false]
+        enemySlain: 0,
+        meatObtained: 0,
+        goldObtained: 0
     }
 }
 

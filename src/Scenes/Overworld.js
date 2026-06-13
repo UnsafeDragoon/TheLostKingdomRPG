@@ -7,6 +7,22 @@ class overworld extends Phaser.Scene {
     }
     create() {
 
+        this.dialogueData = {
+            "The Chief": [
+                "Knight! You must help our townspeople in such dire need!"
+            ],
+            "Meaty Megee": [
+                "Aw fiddlesticks! Some dark knights stole my meat supply and won't give it back!"
+            ],
+            "Gold Gremlin Gary": [
+                "Aw dangnabbit! Some rube robbed me on my way here and scattered my 3 gold pieces somewhere!"
+            ],
+            "Lumberjack Larry": [
+                "Hot belgian waffles! Some dark knights are squatting in the forrest below where I chop my wood!"
+            ]
+        }
+
+
 
         this.map = this.make.tilemap({
             key: "overworld"
@@ -55,11 +71,54 @@ class overworld extends Phaser.Scene {
 
 
 
+        
+        
+
+        this.anims.create({
+            key: "chiefIdle",
+            frameRate: 12,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("chiefIdle", {
+                frames: [0, 1, 2, 3, 4, 5]
+            })
+        })
+
+        this.anims.create({
+            key: "meatIdle",
+            frameRate: 12,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("meatIdle", {
+                frames: [0, 1, 2, 3, 4, 5, 6, 7]
+            })
+        })
+
+        this.anims.create({
+            key: "goldIdle",
+            frameRate: 12,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("goldIdle", {
+                frames: [0, 1, 2, 3, 4, 5, 6, 7]
+            })
+        })
+
+        this.anims.create({
+            key: "woodIdle",
+            frameRate: 12,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("woodIdle", {
+                frames: [0, 1, 2, 3, 4, 5, 6, 7]
+            })
+        })
+
+        
+
 
         this.left = this.input.keyboard.addKey("A");
         this.right = this.input.keyboard.addKey("D");
         this.up = this.input.keyboard.addKey("W");
         this.down = this.input.keyboard.addKey("S");
+
+        this.interact = this.input.keyboard.addKey("E");
 
         //let sprite = this.add.sprite(0, 0, "playerIdle");
 
@@ -69,6 +128,8 @@ class overworld extends Phaser.Scene {
             this.left, this.right, this.up, this.down);
         this.player.setScale(1);
         this.player.moveSpeed = 800;
+        this.player.nearNPC = null;
+        this.nearNPCReset = 50;
 
         this.anims.create({
             key: "playerIdle",
@@ -94,14 +155,49 @@ class overworld extends Phaser.Scene {
         this.physics.add.collider(this.player, this.decorFLayer);
         this.physics.add.collider(this.player, this.decorBLayer);
 
-        this.player.depth = this.player.y;
-        this.decorFLayer.depth = this.player.y + 1;
+        this.player.depth = this.player.y + 1;
+        this.decorFLayer.depth = this.player.y + 2;
         this.decorBLayer.depth = this.player.y - 1;
         
 
 
+        let objectLayer = this.map.getObjectLayer("objectsLayer");
+
+        console.log(objectLayer);
+        
+        this.npcs = this.add.group();
+
+        objectLayer.objects.forEach(obj => {
+            
+            if(obj.properties.find(p => p.name === "type")?.value === "npc"){
+                let anim = obj.properties.find(p => p.name === "animation")?.value;
+                let npc = new NPC(this, obj.x, obj.y, anim);
+                npc.name = obj.properties.find(p => p.name === "name")?.value;
+                npc.depth = this.player.y;
+                npc.play(anim);
+                this.npcs.add(npc);
+            }
+        });
+        
+        this.physics.add.overlap(this.player, this.npcs, (obj1, obj2) => {
+            //console.log(obj2);
+            
+            this.nearNPC = obj2;
+        });
+
         
             
+        this.input.keyboard.on("keydown-E", () => {
+            if(this.nearNPC != null){
+                console.log(`Talking to ${this.nearNPC.name}!`);
+                this.dialogue.setText(`${this.nearNPC.name}: ${this.dialogueData[this.nearNPC.name][0]}`);
+                this.dialogue.visible = true;
+                setTimeout(() => {
+                    this.dialogue.visible = false;
+                }, 5000)
+            }
+        })
+
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.player, true, 1, 1); 
@@ -116,6 +212,16 @@ class overworld extends Phaser.Scene {
             this.map.widthInPixels,
             this.map.heightInPixels
         );
+
+        this.dialogue = this.add.text(0, 0, "Speaker: Blah blah ", {
+            fontSize: "32px",
+            fontFamily: '"Press Start 2P"',
+            fill: "#00ff00",
+            wordWrap: {width: 500}
+        }).setScrollFactor(0);
+        
+        this.dialogue.depth = this.player.y + 20;
+        this.dialogue.visible = false;
 
 
 
@@ -143,18 +249,17 @@ class overworld extends Phaser.Scene {
     }
 
     update(time, delta) {
-//         console.log(
-//     this.player.x,
-//     this.player.y,
-//     this.cameras.main.scrollX,
-//     this.cameras.main.scrollY
-// );
 
-        //if(time % 100 == 0){
-            //console.log(tile);
+        this.nearNPCReset--;
+        if(this.nearNPCReset < 0){
+            //console.log("RESET!");
             
-        //}
-        
+            this.nearNPC = null;
+            this.nearNPCReset = 50;
+            //console.log(this.nearNPC);
+            
+        }
+
         this.player.update();
         //console.log(this.game.loop.actualFps);
     }

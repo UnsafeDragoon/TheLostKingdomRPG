@@ -53,9 +53,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         } else if(!isMoving && this.anims.currAnim?.key !== "playerIdle"){
             this.anims.play("playerIdle", true);
         }
+
+       // updateInteractNPC();
+
+        
     }
 
-    
+    // updateInteractNPC(){
+    //     let nearNPC = null;
+
+    //     this.scene.npcs.getChildren().array.forEach(npc => {
+    //         if(Phaser.Math.Distance.Between(this.x, this.y, npc.x, npc.y) < 30){
+    //             near
+    //         }
+    //     });
+    // }
 
     takeDamage(amount) {
         this.health -= amount;

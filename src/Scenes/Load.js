@@ -19,6 +19,23 @@ class Load extends Phaser.Scene {
             frameHeight: 100
         });
 
+        this.load.spritesheet("chiefIdle", "sprites/Idle.png", {
+            frameWidth: 192,
+            frameHeight: 192
+        });
+        this.load.spritesheet("meatIdle", "sprites/Pawn_Idle Meat.png", {
+            frameWidth: 192,
+            frameHeight: 192
+        });
+        this.load.spritesheet("goldIdle", "sprites/Pawn_Idle Gold.png", {
+            frameWidth: 192,
+            frameHeight: 192
+        });
+        this.load.spritesheet("woodIdle", "sprites/Pawn_Idle Wood.png", {
+            frameWidth: 192,
+            frameHeight: 192
+        });
+
         this.load.image("tilemap_water", "tiles/Water Background color.png");
         
         this.load.image("tilemap_yMonastery", "tiles/Monastery.png");

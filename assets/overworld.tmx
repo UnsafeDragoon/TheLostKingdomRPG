@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="64" tileheight="64" infinite="0" nextlayerid="10" nextobjectid="10">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="64" tileheight="64" infinite="0" nextlayerid="10" nextobjectid="16">
  <editorsettings>
   <export target="overworld.tmj" format="json"/>
  </editorsettings>
@@ -388,6 +388,64 @@
    </animation>
   </tile>
  </tileset>
+ <tileset firstgid="391" name="Idle" tilewidth="192" tileheight="192" tilecount="6" columns="6">
+  <image source="../../../assets/Tiny Swords (Free Pack)/Units/Yellow Units/Monk/Idle.png" width="1152" height="192"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="80"/>
+    <frame tileid="1" duration="80"/>
+    <frame tileid="2" duration="80"/>
+    <frame tileid="3" duration="80"/>
+    <frame tileid="4" duration="80"/>
+    <frame tileid="5" duration="80"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="397" name="Pawn_Idle Gold" tilewidth="192" tileheight="192" tilecount="8" columns="8">
+  <image source="../../../assets/Tiny Swords (Free Pack)/Units/Yellow Units/Pawn/Pawn_Idle Gold.png" width="1536" height="192"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="80"/>
+    <frame tileid="1" duration="80"/>
+    <frame tileid="2" duration="80"/>
+    <frame tileid="3" duration="80"/>
+    <frame tileid="4" duration="80"/>
+    <frame tileid="5" duration="80"/>
+    <frame tileid="6" duration="80"/>
+    <frame tileid="7" duration="80"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="405" name="Pawn_Idle Wood" tilewidth="192" tileheight="192" tilecount="8" columns="8">
+  <image source="../../../assets/Tiny Swords (Free Pack)/Units/Yellow Units/Pawn/Pawn_Idle Wood.png" width="1536" height="192"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="80"/>
+    <frame tileid="1" duration="80"/>
+    <frame tileid="2" duration="80"/>
+    <frame tileid="3" duration="80"/>
+    <frame tileid="4" duration="80"/>
+    <frame tileid="5" duration="80"/>
+    <frame tileid="6" duration="80"/>
+    <frame tileid="7" duration="80"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="413" name="Pawn_Idle Meat" tilewidth="192" tileheight="192" tilecount="8" columns="8">
+  <image source="../../../assets/Tiny Swords (Free Pack)/Units/Yellow Units/Pawn/Pawn_Idle Meat.png" width="1536" height="192"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="80"/>
+    <frame tileid="1" duration="80"/>
+    <frame tileid="2" duration="80"/>
+    <frame tileid="3" duration="80"/>
+    <frame tileid="4" duration="80"/>
+    <frame tileid="5" duration="80"/>
+    <frame tileid="6" duration="80"/>
+    <frame tileid="7" duration="80"/>
+   </animation>
+  </tile>
+ </tileset>
  <layer id="2" name="backgroundLayer" width="50" height="50">
   <data encoding="csv">
 55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
@@ -550,9 +608,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="8" name="Object Layer 1">
-  <object id="9" gid="202" x="3912" y="520" width="64" height="64"/>
- </objectgroup>
  <layer id="6" name="decorFrontLayer" width="50" height="50">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -661,4 +716,34 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="8" name="objectsLayer" offsetx="74" offsety="-84">
+  <object id="10" name="TheChief" gid="391" x="1538" y="1346" width="192" height="192">
+   <properties>
+    <property name="animation" value="chiefIdle"/>
+    <property name="name" value="The Chief"/>
+    <property name="type" value="npc"/>
+   </properties>
+  </object>
+  <object id="12" name="GoldGremlinGary" gid="397" x="1344" y="1918" width="192" height="192">
+   <properties>
+    <property name="animation" value="goldIdle"/>
+    <property name="name" value="Gold Gremlin Gary"/>
+    <property name="type" value="npc"/>
+   </properties>
+  </object>
+  <object id="13" name="LumberjackLarry" gid="2147484053" x="1852" y="1662" width="192" height="192">
+   <properties>
+    <property name="animation" value="woodIdle"/>
+    <property name="name" value="Lumberjack Larry"/>
+    <property name="type" value="npc"/>
+   </properties>
+  </object>
+  <object id="15" name="MeatyMegee" gid="2147484061" x="1214" y="1594" width="192" height="192">
+   <properties>
+    <property name="animation" value="meatIdle"/>
+    <property name="name" value="Meaty Megee"/>
+    <property name="type" value="npc"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
